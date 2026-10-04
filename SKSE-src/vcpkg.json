@@ -1,0 +1,11 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "astr2-skse",
+    "version-string": "0.0.1",
+    "description": "ASuccubusTaleR2 native SKSE plugin (CommonLibSSE-NG)",
+    "dependencies": [
+        "commonlibsse-ng",
+        "nlohmann-json",
+        "minhook"
+    ]
+}
