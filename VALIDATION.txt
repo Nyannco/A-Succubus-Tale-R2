@@ -1,0 +1,26 @@
+ASuccubusTaleR2 1.0.0 public package (DLL built 2026-10-05, SHA256 A3C2F13C…)
+
+※ビルド/テスト/ハッシュ欄は、ログ削除後の release 構成ビルド（メイン板）で確定値を埋める。
+
+Build: MSVC toolset 14.51.36231 (Visual Studio 18 Community) / CommonLibSSE-NG via vcpkg (colorglass registry, baseline 6fb127f7) / Ninja, Release config. Release build succeeded (41 translation units, 0 errors); compiler warnings were not separately tallied.
+CTest: N/A — this project ships no automated C++ test suite (validation is in-game; see below).
+Automated coverage: N/A — no unit tests; coverage is the in-game validation listed below.
+
+USER-REPORTED IN-GAME VALIDATION (development environment, main runtime Skyrim SE 1.6.1170):
+- Core features exercised in the author's environment: succubus awakening/leveling, Essence drain (single/concentration/area), charm & servantship tiers, Sweet Vassal (reanimated and living), H-Skills, Nightmare Embrace, sigils, Essence Shards, Sweet Elixirs, and the full MCM.
+- Human-mode toggle preserves progress and restores on re-awakening.
+- FOMOD language choice (English/Japanese) applies the correct translation.
+- In-game bug-report generation writes ASTR2_BugReport.txt to the SKSE log folder.
+
+LIMITS / UNVERIFIED:
+- A native crash can occur if an enemy walks up and attacks after an OStim scene has started (scenes are guarded only at launch).
+- Mixing an old OStim version can cause scene freezes; the tested version is 7.5.1b.
+- Quest-critical NPCs are intentionally excluded from Sweet Vassal.
+- Sweet Vassal (living) + a separate follower-management mod may cause a revived wild NPC (e.g. bandit) to reappear as an ally at respawn; cause not fully identified.
+- Compatibility with arbitrary mod setups, body types other than 3BA, and runtimes other than 1.6.1170 are not exhaustively tested.
+
+DATA:
+- Persistent data (Records.json = lifetime records, Config.json = settings) lives in SKSE StorageUtilData (ASuccubusTaleR2 folder), external to game saves.
+- Runtime/source archives exclude developer debug logs and diagnostics. Source retains licenses.
+
+DLL SHA256: A3C2F13C6A99EFB76A98E9D47F4B3D9104BDAB9CBEB4A7428105D12D51BDD6A2
