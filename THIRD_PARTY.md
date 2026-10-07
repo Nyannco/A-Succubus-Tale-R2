@@ -29,7 +29,7 @@ Only the **integration headers** used to build our own DLL (ASTR2Native) are bun
 
 ## Build dependencies (linked into our DLL; full texts bundled in `LICENSES/`)
 
-`vcpkg.json` directly specifies three (commonlibsse-ng / nlohmann-json / minhook), but the "grand-dependencies" CommonLibSSE-NG uses internally (fmt / spdlog / rapidcsv / xbyak) are also embedded in the distributed DLL. **Seven licenses require display**, listed below. Each copyright is generated automatically at build time under `vcpkg_installed/…/share/<lib>/copyright` (no internet needed), and their full texts are copied into `LICENSES/`.
+`vcpkg.json` directly specifies three (commonlibsse-ng / nlohmann-json / minhook), but the "grand-dependencies" CommonLibSSE-NG uses internally (fmt / spdlog / rapidcsv / xbyak / DirectXMath / DirectXTK) are also embedded in the distributed DLL. **Nine licenses require display**, listed below. Each copyright is generated automatically at build time under `vcpkg_installed/…/share/<lib>/copyright` (no internet needed), and their full texts are copied into `LICENSES/`.
 
 | Library | License | Copyright | Use |
 |---|---|---|---|
@@ -39,6 +39,8 @@ Only the **integration headers** used to build our own DLL (ASTR2Native) are bun
 | nlohmann/json | MIT | Niels Lohmann | JSON storage |
 | rapidcsv | BSD 3-Clause | Kristofer Berggren | CSV reading (CommonLib grand-dep) |
 | xbyak | BSD 3-Clause | MITSUNARI Shigeo | JIT assembler (CommonLib grand-dep) |
+| DirectXMath | MIT | Microsoft Corporation | Math library (CommonLib grand-dep) |
+| DirectXTK | MIT | Microsoft Corporation | DirectX Tool Kit (CommonLib grand-dep) |
 | MinHook | BSD 2-Clause | Tsuda Kageyu | Function hooking (real-number display on item/spell cards) |
 
 Both MIT and BSD require reproducing the copyright notice when distributing binaries, so bundling them in `LICENSES/` is mandatory.
@@ -46,7 +48,7 @@ Both MIT and BSD require reproducing the copyright notice when distributing bina
 ## AI-assistance disclosure & test environment
 
 - The implementation was created with the assistance of an AI (Claude / Anthropic); design, verification, and decisions were made by **nyannco (NonbiriSkyrim)**. This disclosure is retained upon publication.
-- The primary test environment is Skyrim SE **1.6.1170** (the stable build). 1.7.x / GOG / VR are untested.
+- The primary test environment is Skyrim SE **1.6.1170** (the stable build). **1.7.104** was checked in-game but not thoroughly tested. GOG / VR are untested.
 
 ## References
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.0.0 — First public release
+## 1.1.0 (2026-10-07) — Skyrim 1.7.104 support
 
-ASuccubusTaleR2 (ASTR2) — an OStim-integrated succubus mod for Skyrim SE. Become a succubus: seduce NPCs and drain their Essence through OStim scenes to grow in power, charm victims into servants, and raise the dead as your vassals.
+- Added support for Skyrim 1.7.104. The same file now runs on both 1.6.1170 and 1.7.104.
+- No gameplay changes; existing saves remain fully compatible.
+
+## 1.0.0 (2026-10-05) — First public release
+
+A Succubus Tale R2 (ASTR2) — an OStim-integrated succubus mod for Skyrim SE. Become a succubus: seduce NPCs and drain their Essence through OStim scenes to grow in power, charm victims into servants, and raise the dead as your vassals.
 
 - Succubus leveling (Lv1–100) with auto-scaling max Magicka/Health/Stamina, regeneration, Speech, and skill-XP bonuses.
 - Essence drain: single-target, concentration, and area/Ravenous drains, plus OStim-orgasm drain and scene finishers.

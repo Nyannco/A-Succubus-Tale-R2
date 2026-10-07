@@ -1,12 +1,12 @@
-ASuccubusTaleR2 1.0.0 public package (DLL built 2026-10-05, SHA256 A3C2F13C…)
+ASuccubusTaleR2 1.1.0 public package (DLL built 2026-10-07, SHA256 D8D794F2…)
 
 ※ビルド/テスト/ハッシュ欄は、ログ削除後の release 構成ビルド（メイン板）で確定値を埋める。
 
-Build: MSVC toolset 14.51.36231 (Visual Studio 18 Community) / CommonLibSSE-NG via vcpkg (colorglass registry, baseline 6fb127f7) / Ninja, Release config. Release build succeeded (41 translation units, 0 errors); compiler warnings were not separately tallied.
+Build: MSVC toolset 14.51.36231 (Visual Studio 18 Community) / CommonLibSSE-NG (alandtse CommonLibVR fork, v11.0.0) via vcpkg (microsoft/vcpkg default-registry baseline 0bc1a55 + overlay-ports for the fork) / Ninja, Release config. Version-independent build (one DLL runs on 1.6.1170 and 1.7.104). Release build succeeded (0 errors).
 CTest: N/A — this project ships no automated C++ test suite (validation is in-game; see below).
 Automated coverage: N/A — no unit tests; coverage is the in-game validation listed below.
 
-USER-REPORTED IN-GAME VALIDATION (development environment, main runtime Skyrim SE 1.6.1170):
+USER-REPORTED IN-GAME VALIDATION (development environment, main runtime Skyrim SE 1.6.1170; also launched on 1.7.104 — limited check, not thoroughly tested):
 - Core features exercised in the author's environment: succubus awakening/leveling, Essence drain (single/concentration/area), charm & servantship tiers, Sweet Vassal (reanimated and living), H-Skills, Nightmare Embrace, sigils, Essence Shards, Sweet Elixirs, and the full MCM.
 - Human-mode toggle preserves progress and restores on re-awakening.
 - FOMOD language choice (English/Japanese) applies the correct translation.
@@ -23,4 +23,4 @@ DATA:
 - Persistent data (Records.json = lifetime records, Config.json = settings) lives in SKSE StorageUtilData (ASuccubusTaleR2 folder), external to game saves.
 - Runtime/source archives exclude developer debug logs and diagnostics. Source retains licenses.
 
-DLL SHA256: A3C2F13C6A99EFB76A98E9D47F4B3D9104BDAB9CBEB4A7428105D12D51BDD6A2
+DLL SHA256: D8D794F28A279645959421F04E1B2E92320EFE228251B9DE694E2DE187069E6C
