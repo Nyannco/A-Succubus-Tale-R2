@@ -89,10 +89,10 @@ namespace HDrain {
             return a->AsActorValueOwner()->GetPermanentActorValue(RE::ActorValue::kHealth);
         }
         inline void DamageHP(RE::Actor* a, float amt) {
-            a->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, -amt);
+            a->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, -amt);
         }
         inline void HealHP(RE::Actor* a, float amt) {
-            a->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, amt);
+            a->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, amt);
         }
 
         // 💋 H中ドレインの素の威力式＝計算の定義は1か所です。実核DoDrainも表示getter HDrainOrgasmBaseNow も共用します。

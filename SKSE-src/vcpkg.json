@@ -4,7 +4,7 @@
     "version-string": "0.0.1",
     "description": "ASuccubusTaleR2 native SKSE plugin (CommonLibSSE-NG)",
     "dependencies": [
-        "commonlibsse-ng",
+        "commonlibsse-ng-fork",
         "nlohmann-json",
         "minhook"
     ]

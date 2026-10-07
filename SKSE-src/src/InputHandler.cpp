@@ -88,8 +88,8 @@ namespace {
                     spdlog::info("Shift+T: toggled free camera (tfc)");
                 }
                 // value=0 にして「押されていない」状態に見せる＝待機メニューを暴発させません
-                button->value = 0.0f;
-                button->heldDownSecs = 0.0f;
+                button->GetRuntimeData().value = 0.0f;
+                button->GetRuntimeData().heldDownSecs = 0.0f;
             }
         }
     }

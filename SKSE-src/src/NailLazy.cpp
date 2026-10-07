@@ -31,11 +31,11 @@ namespace NailLazy {
         // Fury実証の移動速度即反映＝SpeedMult変更後にCarryWeightを+0.1→次フレーム-0.1（別イベント2回で派生値=移動速度を再計算誘発）。所持重量は差引ゼロです。
         void NudgeSpeed(RE::ActorValueOwner* a_avo) {
             if (!a_avo) return;
-            a_avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, 0.1f);
+            a_avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, 0.1f);
             SKSE::GetTaskInterface()->AddTask([]() {
                 if (auto* pc = RE::PlayerCharacter::GetSingleton())
                     if (auto* avo = pc->AsActorValueOwner())
-                        avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, -0.1f);
+                        avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, -0.1f);
             });
         }
 
@@ -61,7 +61,7 @@ namespace NailLazy {
 
         void Apply(RE::ActorValueOwner* avo, float amt) {
             if (!avo || amt <= 0.0f) return;
-            avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kSpeedMult, amt);
+            avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kSpeedMult, amt);
             g_appliedSpeed = amt;
             g_applied = true;
             NudgeSpeed(avo);
@@ -70,7 +70,7 @@ namespace NailLazy {
 
         void Remove(RE::ActorValueOwner* avo) {
             if (!avo || !g_applied) return;
-            avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kSpeedMult, -g_appliedSpeed);
+            avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kSpeedMult, -g_appliedSpeed);
             spdlog::info("[NailLazy] speed -{:.1f} (removed)", g_appliedSpeed);
             g_appliedSpeed = 0.0f;
             g_applied = false;

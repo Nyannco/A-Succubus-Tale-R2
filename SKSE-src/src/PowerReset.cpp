@@ -181,7 +181,7 @@ namespace {
             } while (g_notifyGen.load() != seen);  // まだ増えてる間は出しません＝連打が続く限り待ちます
             const std::int32_t left = g_tokens.load();
             std::string msg = Localization::LocFmtStrCpp("$ASTR2_Msg_PowerTokenGained", { std::to_string(left) });
-            SKSE::GetTaskInterface()->AddTask([msg]() { RE::DebugNotification(msg.c_str()); });
+            SKSE::GetTaskInterface()->AddTask([msg]() { RE::SendHUDMessage::ShowHUDMessage(msg.c_str()); });
             g_notifyBusy.store(false);
         }).detach();
     }
@@ -318,7 +318,7 @@ namespace {
                         sweetUnpaid = true;
                         spdlog::info("[SweetCost] not paid: LF {} < cost {} flag=0 (effect will fizzle by MGEF condition)", lf, cost);
                         std::string msg = Localization::LocFmtStrCpp("$ASTR2_Msg_VassalNoLF", {});
-                        SKSE::GetTaskInterface()->AddTask([msg]() { RE::DebugNotification(msg.c_str()); });
+                        SKSE::GetTaskInterface()->AddTask([msg]() { RE::SendHUDMessage::ShowHUDMessage(msg.c_str()); });
                     }
                 } else {
                     SetSweetPaid(false);
@@ -418,7 +418,7 @@ namespace {
                          a_spell->GetName(), id, mine ? "ASTR2" : "other-mod", left);
             // 画面通知します（$キー未収録なら生キーが出ます＝可視）
             std::string msg = Localization::LocFmtStrCpp("$ASTR2_Msg_PowerTokenUsed", { std::to_string(left) });
-            SKSE::GetTaskInterface()->AddTask([msg]() { RE::DebugNotification(msg.c_str()); });
+            SKSE::GetTaskInterface()->AddTask([msg]() { RE::SendHUDMessage::ShowHUDMessage(msg.c_str()); });
         }
 
         static inline REL::Relocation<decltype(thunk)> func;

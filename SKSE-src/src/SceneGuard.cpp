@@ -43,7 +43,7 @@ namespace {
         for (int i = 0; i < 3; ++i) {
             const std::string msg = Localization::LocFmtStrCpp(kNotifyKeys[i], {});
             if (!msg.empty()) {
-                RE::DebugNotification(msg.c_str());
+                RE::SendHUDMessage::ShowHUDMessage(msg.c_str());
             }
         }
         spdlog::info("[SceneGuard] hostile detected within {:.0f} -> OThread.Stop(0) + 3-line notify", kDangerRange);

@@ -17,7 +17,7 @@ namespace BugReport
 
         constexpr const char* kEsp          = "A Succubus Tale R2.esp";
         // ログ本体＝SKSEログフォルダの ASTR2SKSE.log（spdlog）。レア事象(spdlog::warn [RARE])もここに出ます＝不具合報告に丸ごと取り込みます。
-        constexpr int         kLogTail      = 300;   // 配布版はwarnレベルで小さい＝現セッションぶんがほぼ全部入ります
+        constexpr int         kLogTail      = 300;   // 配布(Release)はwarnレベルso小さい＝現セッションぶんがほぼ全部入ります（検証Debugはinfoで多く末尾のみ）
         // 起動失敗ローリングログ＝SKSEログフォルダ（BugReport本体と同じ所）。全reasonを記録し、N行で古い順にトリムします。
         constexpr const char* kFailFileName = "ASTR2_SceneLaunchFail.txt";
         constexpr int         kFailTail     = 20;

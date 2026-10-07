@@ -22,6 +22,9 @@
 #include "Chronos.h"
 #include "LifeForceDecay.h"
 #include "VassalUpkeep.h"
+#ifndef NDEBUG
+#include "ProbeDump.h"   // 🔬 診断native(ProbeDumpCpp)＝Debug専用so Release(NDEBUG)では除外
+#endif
 #include "BugReport.h"
 #include "NailLazy.h"
 #include "NailDesc.h"
@@ -53,8 +56,14 @@ namespace {
         auto logFilePath = *logsFolder / "ASTR2SKSE.log";
         auto fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath.string(), true);
         auto logger = std::make_shared<spdlog::logger>("log", std::move(fileSink));
-        logger->set_level(spdlog::level::warn);   // 配布版：info/debugを黙らせる（warn/err/クラッシュ原因は残す）。devはinfoのまま
+        // 検証(Debug)はinfoで全動作を記録／配布(Release)はwarnに絞ります＝ログが小さく、BugReportの末尾N行でセッションの要点(警告/[RARE])がほぼ収まります。
+#ifdef NDEBUG
+        logger->set_level(spdlog::level::warn);
         logger->flush_on(spdlog::level::warn);
+#else
+        logger->set_level(spdlog::level::info);
+        logger->flush_on(spdlog::level::info);
+#endif
         spdlog::set_default_logger(std::move(logger));
     }
 }
@@ -94,6 +103,10 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse) {
 
     // スイート・ヴァッサル：死霊の生者化(ConvertVassalToLiving)と起こしかけガード(CancelVassalRaise)のPapyrusネイティブを登録します
     SKSE::GetPapyrusInterface()->Register(VassalRaise::RegisterPapyrus);
+#ifndef NDEBUG
+    // 🔬【調整用】右Ctrl診断のエンジン内部ダンプです（ASTR2Native.ProbeDumpCpp）＝Debug専用so Releaseでは登録しません
+    SKSE::GetPapyrusInterface()->Register(ProbeDump::RegisterPapyrus);
+#endif
 
     // 🩹 不具合報告ファイル：1枚ダンプ ASTR2_BugReport.txt を生成するネイティブ(ASTR2Native.WriteBugReport)を登録します
     SKSE::GetPapyrusInterface()->Register(BugReport::RegisterPapyrus);
@@ -200,6 +213,10 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse) {
             LifeForceDecay::Install();
             // 🧟 スイート・ヴァッサルの維持費2種（死霊の維持費・生者の維持費）を核へ（6ゲーム時間ごと・旧Papyrus巡回から移設します）
             VassalUpkeep::Install();
+#ifndef NDEBUG
+            // 🔬【調整用】ヴァッサルの召喚体フラグ/ライフステートの変化を見張ります（実時間0.5秒・[Probe][watch]）＝Debug専用
+            ProbeDump::Install();
+#endif
             // 🩸 H中のHPバー更新を核へ（実時間1秒ごと・Papyrusの毎秒ループを廃止します）
             HpBarHud::Install();
             // 🔮 ウィークネス中の淫紋段階を核へ（相手の数だけ立っていたPapyrusループを廃止します）

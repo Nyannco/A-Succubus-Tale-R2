@@ -34,7 +34,7 @@ namespace VassalUpkeep
 
         void Notify(const char* a_key, const std::vector<std::string>& a_args) {
             std::string msg = Localization::LocFmtStrCpp(a_key, a_args);
-            SKSE::GetTaskInterface()->AddTask([msg]() { RE::DebugNotification(msg.c_str()); });
+            SKSE::GetTaskInterface()->AddTask([msg]() { RE::SendHUDMessage::ShowHUDMessage(msg.c_str()); });
         }
 
         // 💀 寵愛切れの死亡処理＝専用イベント ASTR2_VassalLoveExpired で送出します（死亡掃除は VassalDied と同じ id→Actor 経路）。生者限定の死＝死体化（Kill）です。
@@ -200,7 +200,7 @@ namespace VassalUpkeep
                             const char  ps   = pers[id % 3u];   // FormIDで性格を個体固定
                             const char  stg  = (curLvl == 2) ? '2' : '1';
                             const std::string key = std::string("$ASTR2_Msg_VLoveW") + stg + "_" + sx + ps;
-                            // 本番HUDキューへ確定文字列を積みます（Notify(DebugNotification)から差し替え）＝1体5秒ずつ順番表示・ON/OFF判定はHUD側です。
+                            // 本番HUDキューへ確定文字列を積みます＝1体5秒ずつ順番表示・ON/OFF判定はHUD側です。
                             VLoveHud::Enqueue(Localization::LocFmtStrCpp(key.c_str(), { nm, std::to_string(warnHours) }));
                         }
                     }

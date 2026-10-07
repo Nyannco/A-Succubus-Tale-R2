@@ -104,11 +104,11 @@ namespace Fury {
         //   ★旧実装は同フレームで±して相殺→変更イベントが立たず効きませんでした。所持重量は差引ゼロで不変です。
         void NudgeSpeed(RE::ActorValueOwner* a_avo) {
             if (!a_avo) return;
-            a_avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, 0.1f);
+            a_avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, 0.1f);
             SKSE::GetTaskInterface()->AddTask([]() {
                 if (auto* pc = RE::PlayerCharacter::GetSingleton()) {
                     if (auto* avo = pc->AsActorValueOwner())
-                        avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, -0.1f);
+                        avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kCarryWeight, -0.1f);
                 }
             });
         }
@@ -173,8 +173,8 @@ namespace Fury {
             auto* shader = FuryGlowShader();
             auto* pl = RE::ProcessLists::GetSingleton();
             if (!a_pc || !shader || !pl) return;
-            pl->ForEachShaderEffect([&](RE::ShaderReferenceEffect& se) {
-                if (se.effectData == shader && se.target.get().get() == a_pc) se.finished = true;
+            pl->ForEachShaderEffect([&](RE::ShaderReferenceEffect* se) {
+                if (se->effectData == shader && se->target.get().get() == a_pc) se->finished = true;
                 return RE::BSContainer::ForEachResult::kContinue;
             });
             spdlog::info("[Fury]   ✨ピンクもや停止");
@@ -198,7 +198,7 @@ namespace Fury {
             auto applyAV = [&](RE::ActorValue av, float amt) {
                 if (amt == 0.0f) return;
                 const float before = avo->GetActorValue(av);
-                avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, av, amt);
+                avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, av, amt);
                 const float after = avo->GetActorValue(av);
                 g_appliedAV.emplace_back(av, amt);
                 spdlog::info("[Fury]   +{} {:.1f} -> {:.1f} (+{:.1f})", AVName(av), before, after, amt);
@@ -243,7 +243,7 @@ namespace Fury {
                 spdlog::info("[Fury] === OFF 撤去開始 ===");
                 for (auto& [av, amt] : g_appliedAV) {
                     const float before = avo->GetActorValue(av);
-                    avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, av, -amt);   // 適用と逆符号で正確に撤去します
+                    avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, av, -amt);   // 適用と逆符号で正確に撤去します
                     const float after = avo->GetActorValue(av);
                     spdlog::info("[Fury]   -{} {:.1f} -> {:.1f} (-{:.1f})", AVName(av), before, after, amt);
                 }

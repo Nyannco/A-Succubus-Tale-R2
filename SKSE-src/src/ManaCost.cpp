@@ -62,7 +62,7 @@ namespace ManaCost {
                 spdlog::info("[ManaCost] spend cost={:.1f} cur={:.1f} → 不足（不発/中断）", cost, cur);
                 return false;      // 不足＝不発です（呼び元がその魔法を中断します）
             }
-            avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kMagicka, -cost);
+            avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kMagicka, -cost);
             return true;   // ★毎tickの「OK消費」ログは削除します(スパム対策)。不足時だけ上でログを出します。
         }
     }
@@ -156,6 +156,15 @@ namespace ManaCost {
                     const float raw  = s.perSec ? ComputePerSec(costTier) : ComputeBurst(costTier);   // 20×①^stage×costTier（発動は×③）
                     float cost = raw * (1.0f - CachedReduction(c, s.kind));
                     if (cost < 0.0f) cost = 0.0f;
+#ifndef NDEBUG
+                    // 🔍[DIAG]コスト確認＝skill変化時だけログを出します（スパム防止）。Debug専用＝Releaseでは除外。
+                    static float s_lastLoggedSkill[6] = { -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f };
+                    if (i >= 0 && i < 6 && std::fabs(skill - s_lastLoggedSkill[i]) > 0.5f) {
+                        s_lastLoggedSkill[i] = skill;
+                        spdlog::info("[ManaCost-DIAG] slot{} kind={} school(AV)={} skill={:.1f} mastery={} rank={} dispTier={} costTier={} perSec={} raw={:.1f} cost={:.1f}",
+                                     i, static_cast<int>(s.kind), static_cast<int>(s.school), skill, mastery, s.rank, dispTier, costTier, s.perSec, raw, cost);
+                    }
+#endif
                     return cost;
                 }
             }
@@ -227,6 +236,11 @@ namespace ManaCost {
                 auto* mg = dh->LookupForm<RE::EffectSetting>(d.mgefId, kEsp);   // 表示レベル書換用の主効果MGEFです
                 g_slots[g_slotCount++] = { static_cast<RE::MagicItem*>(sp), mg, d.kind, d.rank, d.perSec, d.school };
                 if (d.kind == SpellKind::kRavenous) g_ravenousSpell = sp;   // ★GetChargeTimeフック対象です（/sメニュー連動）
+#ifndef NDEBUG
+                // 🔍[DIAG]/s逆転追跡＝実機の各呪文castType/chargeTimeを起動時に1回だけ吐きます（YAMLとの差を確定します）。Debug専用＝Releaseでは除外。
+                spdlog::info("[ManaCost-DIAG] load {:08X} kind={} castType={} chargeTime={:.2f} perSecFlag={}",
+                             d.id, static_cast<int>(d.kind), static_cast<int>(sp->GetCastingType()), sp->GetChargeTime(), d.perSec);
+#endif
             }
         }
 

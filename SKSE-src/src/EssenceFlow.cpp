@@ -88,8 +88,8 @@ namespace EssenceFlow {
             auto* shader = GlowShader();
             auto* pl = RE::ProcessLists::GetSingleton();
             if (!a_pc || !shader || !pl) return;
-            pl->ForEachShaderEffect([&](RE::ShaderReferenceEffect& se) {
-                if (se.effectData == shader && se.target.get().get() == a_pc) se.finished = true;
+            pl->ForEachShaderEffect([&](RE::ShaderReferenceEffect* se) {
+                if (se->effectData == shader && se->target.get().get() == a_pc) se->finished = true;
                 return RE::BSContainer::ForEachResult::kContinue;
             });
             spdlog::info("[EFlow]   ✨水色もや停止");
@@ -102,7 +102,7 @@ namespace EssenceFlow {
             auto* avo = pc ? pc->AsActorValueOwner() : nullptr;
             // 転用したマジカ再生を戻します
             if (avo && g_rateCut > 0.0f) {
-                avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kMagickaRateMult, g_rateCut);
+                avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kMagickaRateMult, g_rateCut);
                 spdlog::info("[EFlow]   マジカ再生を復元 (+{:.1f})", g_rateCut);
             }
             g_rateCut = 0.0f;
@@ -132,12 +132,12 @@ namespace EssenceFlow {
                 spdlog::info("[EFlow] マジカ不足で発動せず（need={:.0f}）", kCastMagickaCost);
                 return;
             }
-            avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kMagicka, -kCastMagickaCost);
+            avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kMagicka, -kCastMagickaCost);
 
             // マジカ再生の転用＝ソウルのMagRate(〔SkyVault〕・別モジュールがミラーします)をスナップしてカットします＝毎秒ループとは戦いません。
             g_rateCut = SVFloat("ASTR2_SoulMagRate", 0.0f);
             if (g_rateCut > 0.0f) {
-                avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kMagickaRateMult, -g_rateCut);
+                avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kTemporary, RE::ActorValue::kMagickaRateMult, -g_rateCut);
             }
 
             g_healedTotal = 0.0f;
@@ -180,7 +180,7 @@ namespace EssenceFlow {
                         if (pctThisSec > missingPct) pctThisSec = missingPct;
                         if (pctThisSec > 0.0f) {
                             healHP = maxHP * (pctThisSec / 100.0f);
-                            avo->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, healHP);
+                            avo->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, healHP);
                             g_healedTotal += healHP;   // 累計＝解除時に×10%をRestoration XPへ（Fury式）
                         }
                     }

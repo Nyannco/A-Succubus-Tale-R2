@@ -111,10 +111,10 @@ namespace CombatDrain {
             return perm + temp;
         }
         inline void DamageHP(RE::Actor* a, float amt) {
-            a->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, -amt);
+            a->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, -amt);
         }
         inline void HealHP(RE::Actor* a, float amt) {
-            a->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, amt);
+            a->AsActorValueOwner()->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, amt);
         }
 
         // ---- アクティブ集合＝ビーム中のターゲット（key=ターゲットFormID）----
@@ -480,17 +480,17 @@ namespace CombatDrain {
             const bool followerToo = SVInt("ASTR2_RavenousFollowerToo", 0) != 0;
             const bool generalToo  = SVInt("ASTR2_RavenousNpcToo", 0) != 0;   // 正キー（フォロワー版と対）＝一般・ユニークNPC(中立)も吸います
             std::vector<RE::Actor*> found;
-            procLists->ForEachHighActor([&](RE::Actor& a) {
-                if (&a != player && !a.IsDead()) {
-                    const auto ap = a.GetPosition();
+            procLists->ForEachHighActor([&](RE::Actor* a) {
+                if (a != player && !a->IsDead()) {
+                    const auto ap = a->GetPosition();
                     const float dx = pp.x - ap.x, dy = pp.y - ap.y, dz = pp.z - ap.z;
                     if (dx * dx + dy * dy + dz * dz <= r2) {   // 範囲内（距離は問わず枠が埋まるまで拾います）
                         // 敵は常に対象です。フォロワー/一般NPCはトグルONの時だけです。殺す/殺さないはCanKillCpp(AllowKill設定)が決めます。
-                        const bool isEnemy    = a.IsHostileToActor(player) || a.IsInCombat();
-                        const bool isFollower = a.IsPlayerTeammate();
+                        const bool isEnemy    = a->IsHostileToActor(player) || a->IsInCombat();
+                        const bool isFollower = a->IsPlayerTeammate();
                         const bool isGeneral  = !isEnemy && !isFollower;   // 敵でもフォロワーでもない中立です（★ユニークNPCも含みます＝一般NPCトグルで一括吸引します・殺す可否だけAllowKillUniqueで別判定します）
                         if (isEnemy || (followerToo && isFollower) || (generalToo && isGeneral)) {
-                            found.push_back(&a);
+                            found.push_back(a);
                         }
                     }
                 }
@@ -521,7 +521,7 @@ namespace CombatDrain {
             auto* desc = AoeLoopDescriptor();
             auto* am = RE::BSAudioManager::GetSingleton();
             if (!desc || !am || !caster) return;
-            if (am->BuildSoundDataFromDescriptor(g_aoeLoopSound, desc)) {
+            if (am->GetSoundHandle(g_aoeLoopSound, desc)) {
                 if (auto* n = caster->Get3D()) g_aoeLoopSound.SetObjectToFollow(n);
                 g_aoeLoopSound.Play();
             }
@@ -540,7 +540,7 @@ namespace CombatDrain {
             auto* desc = dh->LookupForm<RE::BGSSoundDescriptorForm>(descId, "Skyrim.esm");
             if (!desc) return;
             RE::BSSoundHandle h{};
-            if (am->BuildSoundDataFromDescriptor(h, desc)) {
+            if (am->GetSoundHandle(h, desc)) {
                 if (auto* n = at->Get3D()) h.SetObjectToFollow(n);
                 h.Play();
             }

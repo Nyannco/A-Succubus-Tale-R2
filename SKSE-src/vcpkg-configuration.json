@@ -2,15 +2,18 @@
     "default-registry": {
         "kind": "git",
         "repository": "https://github.com/microsoft/vcpkg.git",
-        "baseline": "a900048467b8199f82c31411e0f1597c267fdada"
+        "baseline": "0bc1a55f422ceb190877234b3ba88c372f04c485"
     },
+    "overlay-ports": [
+        "overlay-ports"
+    ],
     "registries": [
         {
             "kind": "git",
-            "repository": "https://gitlab.com/colorglass/vcpkg-colorglass",
-            "baseline": "6fb127f7d425ae3cf3fab0f79005d907c885c0d8",
+            "repository": "https://github.com/Monitor221hz/modding-vcpkg-ports",
+            "baseline": "aa6db1d21b631042af707a8ff7a5ac2c8e42abd6",
             "packages": [
-                "commonlibsse-ng"
+                "commonlibsse-ng-fork"
             ]
         }
     ]
