@@ -4,9 +4,9 @@ Scriptname ASTR2BugReport Hidden
 ; MCMボタンの OnSelect から ASTR2BugReport.Generate() を呼ぶだけで、ロジックはこの1本に閉じます。
 ; 生成先のフルパスを返します（失敗時は""）。MCMのinfo欄に出力先を表示できます。版数・時刻・レアログ末尾はC++側で足します。
 
-; ASTR2の版数です。配布ごとにここを更新します（README/RELEASE_CHECKLIST/FOMOD info.xmlの版と揃える・現行 v1.0.0）。
+; ASTR2の版数です。配布ごとにここを更新します（README/RELEASE_CHECKLIST/FOMOD info.xmlの版と揃える・現行 v1.1.0）。
 String Function Version() Global
-    Return "1.0.0"
+    Return "1.1.0"
 EndFunction
 
 ; MCMボタンから呼ぶ本体です。値を集めてC++へ渡し、1枚書き出して生成先フルパスを返します。
